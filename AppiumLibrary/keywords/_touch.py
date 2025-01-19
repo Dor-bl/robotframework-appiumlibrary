@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from appium.webdriver.common.touch_action import TouchAction
-
 from AppiumLibrary.locators import ElementFinder
 from .keywordgroup import KeywordGroup
 
@@ -109,31 +107,6 @@ class _TouchKeywords(KeywordGroup):
         element = self._element_find(locator, True, True)
         driver.execute_script("mobile: scroll", {"direction": 'up', 'elementid': element.id})
 
-    def long_press(self, locator, duration=1000):
-        """*DEPRECATED!!* Since selenium v4, use other keywords.
-
-        Long press the element with optional duration """
-        driver = self._current_application()
-        element = self._element_find(locator, True, True)
-        action = TouchAction(driver)
-        action.press(element).wait(duration).release().perform()
-
-    def tap(self, locator, x_offset=None, y_offset=None, count=1):
-        """*DEPRECATED!!* Since selenium v4, use `Tap With Positions` keyword.
-
-        Tap element identified by ``locator``.
-
-        Args:
-        - ``locator`` - (mandatory). Taps coordinates when set to ${None}.
-        - ``x_offset`` - (optional) x coordinate to tap, relative to the top left corner of the element.
-        - ``y_offset`` - (optional) y coordinate. If y is used, x must also be set, and vice versa
-        - ``count`` - can be used for multiple times of tap on that element
-        """
-        driver = self._current_application()
-        el = self._element_find(locator, True, True)
-        action = TouchAction(driver)
-        action.tap(el,x_offset,y_offset, count).perform()
-
     def tap_with_positions(self, duration=500, *locations):
         """Taps on a particular place with up to five fingers, holding for a
         certain time
@@ -181,27 +154,6 @@ class _TouchKeywords(KeywordGroup):
         driver = self._current_application()
         params={'action': 'accept', 'buttonLabel': button_name}
         driver.execute_script("mobile: alert", params)
-
-    def click_a_point(self, x=0, y=0, duration=100):
-        """*DEPRECATED!!* Since selenium v4, use other keywords.
-
-        Click on a point"""
-        self._info("Clicking on a point (%s,%s)." % (x,y))
-        driver = self._current_application()
-        action = TouchAction(driver)
-        try:
-            action.press(x=float(x), y=float(y)).wait(float(duration)).release().perform()
-        except:
-            assert False, "Can't click on a point at (%s,%s)" % (x,y)
-
-    def click_element_at_coordinates(self, coordinate_X, coordinate_Y):
-        """*DEPRECATED!!* Since selenium v4, use other keywords.
-
-        click element at a certain coordinate """
-        self._info("Pressing at (%s, %s)." % (coordinate_X, coordinate_Y))
-        driver = self._current_application()
-        action = TouchAction(driver)
-        action.press(x=coordinate_X, y=coordinate_Y).release().perform()
 
     def drag_and_drop(self, locator: str, target: str):
         """Drags the element identified by ``locator`` into the ``target`` element.
