@@ -4,7 +4,7 @@ import os
 import robot
 import inspect
 from appium import webdriver
-from appium.options.common import AppiumOptions
+from appium.options.common.base import AppiumOptions
 from AppiumLibrary.utils import ApplicationCache
 from .keywordgroup import KeywordGroup
 
