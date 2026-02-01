@@ -50,14 +50,19 @@ class ApplicationManagementKeywordsTests(unittest.TestCase):
         am._debug = mock.Mock()
         am.open_application('remote_url')
         
-        # Mock the get method
-        am._current_application().get = mock.Mock()
+        # Mock the methods
+        driver = am._current_application()
+        driver.get = mock.Mock()
+        driver.set_page_load_timeout = mock.Mock()
         
         # Call go_to_url without timeout
         am.go_to_url('http://example.com')
         
         # Verify get was called with the URL
-        am._current_application().get.assert_called_once_with('http://example.com')
+        driver.get.assert_called_once_with('http://example.com')
+        
+        # Verify set_page_load_timeout was NOT called when timeout is None
+        driver.set_page_load_timeout.assert_not_called()
 
     def test_go_to_url_with_timeout_seconds(self):
         am = _ApplicationManagementKeywords()

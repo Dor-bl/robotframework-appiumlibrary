@@ -402,15 +402,18 @@ class _ApplicationManagementKeywords(KeywordGroup):
             timeout_secs = robot.utils.timestr_to_secs(timeout)
             # Get current timeout to restore it later
             current_timeouts = driver.timeouts
-            original_page_load = current_timeouts.page_load if hasattr(current_timeouts, 'page_load') else None
+            original_page_load = None
+            
+            if current_timeouts is not None and hasattr(current_timeouts, 'page_load'):
+                original_page_load = current_timeouts.page_load
             
             try:
                 # Set the page load timeout
                 driver.set_page_load_timeout(timeout_secs)
                 driver.get(url)
             finally:
-                # Restore the original page load timeout if it was set
-                if original_page_load is not None:
+                # Restore the original page load timeout if it was set and is a valid positive value
+                if original_page_load is not None and original_page_load > 0:
                     driver.set_page_load_timeout(original_page_load / 1000)  # Convert from ms to seconds
         else:
             driver.get(url)
