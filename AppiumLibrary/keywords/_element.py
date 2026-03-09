@@ -615,10 +615,7 @@ class _ElementKeywords(KeywordGroup):
 
     def _click_element_by_name(self, name):
         driver = self._current_application()
-        try:
-            element = driver.find_element(by=AppiumBy.NAME, value=name)
-        except Exception as e:
-            raise e
+        element = driver.find_element(by=AppiumBy.NAME, value=name)
 
         try:
             element.click()
@@ -666,24 +663,15 @@ class _ElementKeywords(KeywordGroup):
             raise 'Cannot click the %s element "%s"' % (class_name, index_or_name)
 
     def _element_clear_text_by_locator(self, locator):
-        try:
-            element = self._element_find(locator, True, True)
-            element.clear()
-        except Exception as e:
-            raise e
+        element = self._element_find(locator, True, True)
+        element.clear()
 
     def _element_input_text_by_locator(self, locator, text):
-        try:
-            element = self._element_find(locator, True, True)
-            element.send_keys(text)
-        except Exception as e:
-            raise e
+        element = self._element_find(locator, True, True)
+        element.send_keys(text)
 
     def _element_input_text_by_class_name(self, class_name, index_or_name, text):
-        try:
-            element = self._find_element_by_class_name(class_name, index_or_name)
-        except Exception as e:
-            raise e
+        element = self._find_element_by_class_name(class_name, index_or_name)
 
         self._info("input text in element as '%s'." % element.text)
         try:
@@ -692,11 +680,8 @@ class _ElementKeywords(KeywordGroup):
             raise 'Cannot input text "%s" for the %s element "%s"' % (text, class_name, index_or_name)
 
     def _element_input_value_by_locator(self, locator, text):
-        try:
-            element = self._element_find(locator, True, True)
-            element.set_value(text)
-        except Exception as e:
-            raise e
+        element = self._element_find(locator, True, True)
+        element.set_value(text)
 
     def _element_find(self, locator, first_only, required, tag=None):
         application = self._current_application()

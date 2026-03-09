@@ -201,7 +201,7 @@ class _ApplicationManagementKeywords(KeywordGroup):
         Executes ADB shell commands.\n
 
         *Android only.*
-        
+
         Args:
         - ``command``: the adb shell command
         - ``args``: arguments to send to the command
@@ -257,7 +257,7 @@ class _ApplicationManagementKeywords(KeywordGroup):
     def activate_application(self, app_id):
         """
         Activates the application if it is not running or is running in the background.
-        
+
         Args:
          - ``app_id``: bundleId for iOS, package name for Android.
 
@@ -289,7 +289,7 @@ class _ApplicationManagementKeywords(KeywordGroup):
     def touch_id(self, match=True):
         """
         Simulates Touch ID on the iOS Simulator.`
-        
+
         Args:
          - ``match`` (boolean): whether the simulated fingerprint is valid (default=True)
 
@@ -394,10 +394,7 @@ class _ApplicationManagementKeywords(KeywordGroup):
         """
         Returns the desired capability value by ``capability_name``.
         """
-        try:
-            capability = self._current_application().capabilities[capability_name]
-        except Exception as e:
-            raise e
+        capability = self._current_application().capabilities[capability_name]
         return capability
 
     def get_window_title(self):
@@ -489,10 +486,7 @@ class _ApplicationManagementKeywords(KeywordGroup):
         return self._cache.current
 
     def _get_platform(self):
-        try:
-            platform_name = self._current_application().capabilities['platformName']
-        except Exception as e:
-            raise e
+        platform_name = self._current_application().capabilities['platformName']
         return platform_name.lower()
 
     def _is_platform(self, platform):
