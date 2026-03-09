@@ -109,7 +109,7 @@ class _ScreenrecordKeywords(KeywordGroup):
             self._html('</td></tr><tr><td colspan="3"><a href="{vid}">'
                        '<video width="800px" controls>'
                        '<source src="{vid}" type="video/mp4">'
-                       '</video></a>'.format(vid=link)
+                       '</video></a>'.format(vid=robot.utils.html_escape(link))
                        )
         # Empty Screen Record Variable
         self._recording = None

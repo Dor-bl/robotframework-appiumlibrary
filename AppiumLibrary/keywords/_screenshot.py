@@ -25,7 +25,7 @@ class _ScreenshotKeywords(KeywordGroup):
 
             # Image is shown on its own row and thus prev row is closed on purpose
             self._html('</td></tr><tr><td colspan="3"><a href="%s">'
-                       '<img src="%s" width="800px"></a>' % (link, link))
+                       '<img src="%s" width="800px"></a>' % (robot.utils.html_escape(link), robot.utils.html_escape(link)))
             return path
         else:
             base64_screenshot = self._current_application().get_screenshot_as_base64()
