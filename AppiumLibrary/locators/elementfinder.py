@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from AppiumLibrary import utils
 from appium.webdriver.common.appiumby import AppiumBy
 from robot.api import logger
 
@@ -153,37 +152,9 @@ class ElementFinder(object):
     def _find_by_default(self, application, criteria, tag, constraints):
         if criteria.startswith('//'):
             return self._find_by_xpath(application, criteria, tag, constraints)
-        # Used `id` instead of _find_by_key_attrs since iOS and Android internal `id` alternatives are
-        # different and inside appium python client. Need to expose these and improve in order to make
-        # _find_by_key_attrs useful.
+        # Used `id` since iOS and Android internal `id` alternatives are different and inside appium
+        # python client.
         return self._find_by_id(application, criteria, tag, constraints)
-
-    # TODO: Not in use after conversion from Selenium2Library need to make more use of multiple auto selector strategy
-    def _find_by_key_attrs(self, application, criteria, tag, constraints):
-        key_attrs = self._key_attrs.get(None)
-        if tag is not None:
-            key_attrs = self._key_attrs.get(tag, key_attrs)
-
-        xpath_criteria = utils.escape_xpath_value(criteria)
-        xpath_tag = tag if tag is not None else '*'
-        xpath_constraints = ["@%s='%s'" % (name, constraints[name]) for name in constraints]
-        xpath_searchers = ["%s=%s" % (attr, xpath_criteria) for attr in key_attrs]
-        xpath_searchers.extend(
-            self._get_attrs_with_url(key_attrs, criteria, application))
-        xpath = "//%s[%s(%s)]" % (
-            xpath_tag,
-            ' and '.join(xpath_constraints) + ' and ' if len(xpath_constraints) > 0 else '',
-            ' or '.join(xpath_searchers))
-        return self._normalize_result(application.find_elements(by=AppiumBy.XPATH, value=xpath))
-
-    # Private
-    _key_attrs = {
-        None: ['@id', '@name'],
-        'a': ['@id', '@name', '@href', 'normalize-space(descendant-or-self::text())'],
-        'img': ['@id', '@name', '@src', '@alt'],
-        'input': ['@id', '@name', '@value', '@src'],
-        'button': ['@id', '@name', '@value', 'normalize-space(descendant-or-self::text())']
-    }
 
     def _get_tag_and_constraints(self, tag):
         if tag is None:
@@ -227,23 +198,6 @@ class ElementFinder(object):
             lambda element: self._element_matches(element, tag, constraints),
             elements)
 
-    def _get_attrs_with_url(self, key_attrs, criteria, browser):
-        attrs = []
-        url = None
-        xpath_url = None
-        for attr in ['@src', '@href']:
-            if attr in key_attrs:
-                if url is None or xpath_url is None:
-                    url = self._get_base_url(browser) + "/" + criteria
-                    xpath_url = utils.escape_xpath_value(url)
-                attrs.append("%s=%s" % (attr, xpath_url))
-        return attrs
-
-    def _get_base_url(self, browser):
-        url = browser.get_current_url()
-        if '/' in url:
-            url = '/'.join(url.split('/')[:-1])
-        return url
 
     def _parse_locator(self, locator):
         prefix = None
