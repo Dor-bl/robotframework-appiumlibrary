@@ -4,7 +4,6 @@ from AppiumLibrary.locators import ElementFinder
 from appium.webdriver.common.appiumby import AppiumBy
 from .keywordgroup import KeywordGroup
 from robot.libraries.BuiltIn import BuiltIn
-import ast
 from unicodedata import normalize
 from selenium.webdriver.remote.webelement import WebElement
 import time
@@ -263,16 +262,16 @@ class _ElementKeywords(KeywordGroup):
         attr_value = elements[0].get_attribute(attr_name)
 
         # ignore regexp argument if matching boolean
-        if isinstance(match_pattern, bool) or match_pattern.lower() == 'true' or match_pattern.lower() == 'false':
+        if isinstance(match_pattern, bool) or (isinstance(match_pattern, str) and match_pattern.lower() in ('true', 'false')):
             if isinstance(match_pattern, bool):
                 match_b = match_pattern
             else:
-                match_b = ast.literal_eval(match_pattern.title())
+                match_b = match_pattern.lower() == 'true'
 
             if isinstance(attr_value, bool):
                 attr_b = attr_value
             else:
-                attr_b = ast.literal_eval(attr_value.title())
+                attr_b = str(attr_value).lower() == 'true'
 
             self._bi.should_be_equal(match_b, attr_b)
 
