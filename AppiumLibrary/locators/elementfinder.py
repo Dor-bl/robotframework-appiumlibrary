@@ -64,7 +64,7 @@ class ElementFinder(object):
             tag, constraints)
 
     def _find_by_dom(self, application, criteria, tag, constraints):
-        result = application.execute_script("return %s;" % criteria)
+        result = application.execute_script("return eval(arguments[0]);", criteria)
         if result is None:
             return []
         if not isinstance(result, list):
@@ -72,9 +72,9 @@ class ElementFinder(object):
         return self._filter_elements(result, tag, constraints)
 
     def _find_by_sizzle_selector(self, application, criteria, tag, constraints):
-        js = "return jQuery('%s').get();" % criteria.replace("'", "\\'")
+        js = "return jQuery(arguments[0]).get();"
         return self._filter_elements(
-            application.execute_script(js),
+            application.execute_script(js, criteria),
             tag, constraints)
 
     def _find_by_link_text(self, application, criteria, tag, constraints):
