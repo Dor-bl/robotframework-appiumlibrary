@@ -62,3 +62,14 @@ class ElementSecurityTests(unittest.TestCase):
         escaped_text = utils.escape_xpath_value(malicious_text)
         expected_xpath = u'//*[contains(@label,{text}) or contains(@value, {text})]'.format(text=escaped_text)
         self.element_keywords._element_find.assert_any_call(expected_xpath, True, True)
+
+    def test_mixed_quotes_secure(self):
+        self.element_keywords._get_platform = mock.Mock(return_value='android')
+        self.element_keywords._element_find = mock.Mock(return_value=mock.Mock())
+        malicious_text = 'a\'b"c'
+
+        self.element_keywords._element_find_by_text(malicious_text, exact_match=True)
+
+        escaped_text = utils.escape_xpath_value(malicious_text)
+        expected_xpath = u'//*[@text={}]'.format(escaped_text)
+        self.element_keywords._element_find.assert_any_call(expected_xpath, True, True)
