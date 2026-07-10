@@ -15,7 +15,7 @@ class ScreenrecordKeywordsTests(unittest.TestCase):
         self.sr._html = mock.Mock()
         self.sr._get_log_dir = mock.Mock(return_value='/tmp/logs')
         # Mock platform detection
-        self.sr._set_output_format = mock.Mock(return_value='mp4')
+        self.sr._set_output_format = mock.Mock(return_value='.mp4')
 
     def test_initial_state(self):
         """Test initial state of screen recorder."""

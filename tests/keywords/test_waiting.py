@@ -28,7 +28,7 @@ class WaitingKeywordsTests(unittest.TestCase):
 
     def test_set_sleep_between_wait_loop_with_string(self):
         """Test setting the sleep interval with a string value."""
-        self.wk.set_sleep_between_wait_loop(robot.utils.timestr_to_secs('1s'))
+        self.wk.set_sleep_between_wait_loop('1s')
         self.assertEqual(self.wk._sleep_between_wait, 1.0)
 
     def test_get_sleep_between_wait_loop(self):
