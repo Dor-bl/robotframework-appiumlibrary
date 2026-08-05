@@ -624,7 +624,7 @@ class _ElementKeywords(KeywordGroup):
         try:
             element.click()
         except Exception as e:
-            raise 'Cannot click the element with name "%s"' % name
+            raise ValueError('Cannot click the element with name "%s"' % name)
 
     def _find_elements_by_class_name(self, class_name):
         driver = self._current_application()
@@ -680,7 +680,7 @@ class _ElementKeywords(KeywordGroup):
         try:
             element.click()
         except Exception as e:
-            raise 'Cannot click the %s element "%s"' % (class_name, index_or_name)
+            raise ValueError('Cannot click the %s element "%s"' % (class_name, index_or_name))
 
     def _element_clear_text_by_locator(self, locator):
         try:
@@ -706,7 +706,7 @@ class _ElementKeywords(KeywordGroup):
         try:
             element.send_keys(text)
         except Exception as e:
-            raise 'Cannot input text "%s" for the %s element "%s"' % (text, class_name, index_or_name)
+            raise ValueError('Cannot input text "%s" for the %s element "%s"' % (text, class_name, index_or_name))
 
     def _element_input_value_by_locator(self, locator, text):
         try:
