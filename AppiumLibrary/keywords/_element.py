@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from AppiumLibrary.locators import ElementFinder
+from AppiumLibrary import utils
 from appium.webdriver.common.appiumby import AppiumBy
 from .keywordgroup import KeywordGroup
 from robot.libraries.BuiltIn import BuiltIn
@@ -631,23 +632,39 @@ class _ElementKeywords(KeywordGroup):
         return elements
 
     def _find_element_by_class_name(self, class_name, index_or_name):
-        elements = self._find_elements_by_class_name(class_name)
-
         if self._is_index(index_or_name):
+            elements = self._find_elements_by_class_name(class_name)
             try:
                 index = int(index_or_name.split('=')[-1])
                 element = elements[index]
             except (IndexError, TypeError):
-                raise 'Cannot find the element with index "%s"' % index_or_name
+                raise ValueError('Cannot find the element with index "%s"' % index_or_name)
         else:
-            found = False
-            for element in elements:
-                self._info("'%s'." % element.text)
-                if element.text == index_or_name:
-                    found = True
-                    break
-            if not found:
-                raise 'Cannot find the element with name "%s"' % index_or_name
+            platform = self._get_platform()
+            safe_name = utils.escape_xpath_value(index_or_name)
+            if platform == 'ios':
+                _xpath = u'//{}[@label={} or @value={}]'.format(class_name, safe_name, safe_name)
+            elif platform == 'android':
+                _xpath = u'//{}[@text={}]'.format(class_name, safe_name)
+            else:
+                _xpath = None
+
+            element = None
+            if _xpath:
+                element = self._element_find("xpath=" + _xpath, True, False)
+                if element:
+                    self._info("'%s'." % element.text)
+
+            if element is None:
+                elements = self._find_elements_by_class_name(class_name)
+                found = False
+                for element in elements:
+                    self._info("'%s'." % element.text)
+                    if element.text == index_or_name:
+                        found = True
+                        break
+                if not found:
+                    raise ValueError('Cannot find the element with name "%s"' % index_or_name)
 
         return element
 
